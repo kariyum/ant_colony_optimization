@@ -1,8 +1,8 @@
 ## Solving salesman problem using Ant colony optimization (ACO)
 
-This is a simulation (visualization) of ACO algorithm. The visualization is intented to demonstrate how ACO works and how to solve a particuler problem, Travelling salesman problem in this case.
+This is a simulation of ACO algorithm. The visualization is intented to demonstrate how ACO works and how to solve a particuler problem, Travelling salesman problem in this case.
 
-### Travelling salesman problem TSP
+### Travelling salesman problem TSP description
 Given a list of cities and the distances between each pair of cities, what is the shortest possible route that visits each city exactly once and returns to the origin city?
 
 It is a well known problem taking part in NP-hard category in combinatorial optimization, important in theoretical computer science and operations research.
