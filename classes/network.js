@@ -115,7 +115,7 @@ export class Network{
         this.ants.push(ant1);
         let r = Math.floor(Math.random()*this.nodes.length);
         ant1.update(this.nodes[r].x, this.nodes[r].y, this.nodes[r].value);
-        for(let i = 0; i<50; i++){
+        for(let i = 0; i<0; i++){
             const ant2 = new Ant();
             this.ants.push(ant2);
             r = Math.floor(Math.random()*this.nodes.length);
@@ -139,8 +139,8 @@ export class Network{
         this.ants.forEach((ant1)=>{
             ant1.updateDesireability(this);
             let next_node_value = ant1.next();
-            // console.log(ant1.value);
-            // console.log(next_node_value);
+            console.log(ant1.value);
+            console.log(next_node_value);
             let node = this.getNode(next_node_value);
             if (node == -1){
                 console.log("Node not found.");
@@ -184,11 +184,12 @@ export class Network{
             }
             n.drawPath();
             n.draw();
-            // n.draw_ants();
-            // n.traceLines();
+            n.draw_ants();
+            n.traceLines();
             n.tracePheromonetrails();
+            console.log('Made a step');
+            clearInterval(n.id);
         }
-        further(this);
         this.id = setInterval(further, 1, this);
         // clearInterval(id);
     }
@@ -243,7 +244,7 @@ export class Network{
         max_pheromone = max_array.reduce(function(a,b){
             return Math.max(a, b);
         });
-        console.log(max_pheromone);
+        // console.log(max_pheromone);
         ctx.lineWidth = 2;
         for( let i=0; i<this.pheromone.length; i++){
             for (let j=0; j<i ;j++){

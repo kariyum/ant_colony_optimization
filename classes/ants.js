@@ -1,4 +1,4 @@
-const alpha = 4; // distance
+const alpha = 2; // distance
 const beta = 4; // pheromone
 export class Ant{
     constructor(){
@@ -30,6 +30,12 @@ export class Ant{
         }
         // console.log('Ant VALUES Updated', 'Current Value ', this.value, 'lastNode ', this.lastNode);
         
+    }
+    updatePosition(x, y){
+        this.previousx = this.x;
+        this.previousy = this.y;
+        this.x = x;
+        this.y = y;
     }
     draw(){
         ctx.beginPath();
@@ -193,7 +199,7 @@ export class Ant{
         if (cost == 0 ){
             console.log('ERROR COST (Releasing pheromone method) VALUE NULL');
         }
-        const ph = 100/cost;
+        const ph = 300/cost;
         for (const [i, j] of pathNM(this.path)){
             network.pheromone[i][j] += ph;
             // console.log(i, j);
