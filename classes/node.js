@@ -6,7 +6,7 @@ export class Node{
     update(x = parseInt(canvas.width / 2), y = parseInt(canvas.height / 2), radius = 15){
         this.x = x;
         this.y = y;
-        this.radius = radius;
+        this.radius = 15;
         radius = radius;
     }
     draw(){

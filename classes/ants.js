@@ -1,4 +1,4 @@
-const alpha = 2; // distance
+const alpha = 4; // distance
 const beta = 4; // pheromone
 export class Ant{
     constructor(){
@@ -7,6 +7,7 @@ export class Ant{
         this.cost = 0;
         this.lastNode = -1;
         this.path = new Set();
+        this.deltaTime = 0;
     }
     reInit(){
         this.path = new Set();
@@ -14,13 +15,19 @@ export class Ant{
         this.visited.add(this.value);
     }
     update(x = canvas.width/2, y = canvas.height/2, value = 0, distances){
-        this.x = x;
-        this.y = y;
-        this.radius = 13;
+        this.previousx = this.x;
+        this.previousy = this.y;
+        this.goalx = x;
+        this.goaly = y;
+        this.radius = 15;
         this.value = value;
         this.visited.add(value);
         if (this.lastNode == -1){
             this.lastNode = value;
+            this.previousx = x;
+            this.previousy = y;
+            this.x = x;
+            this.y = y;
         }else{
             if (value in this.path){
                 console.log('VALUE ALREADY IN PATH.');
@@ -30,6 +37,22 @@ export class Ant{
         }
         // console.log('Ant VALUES Updated', 'Current Value ', this.value, 'lastNode ', this.lastNode);
         
+    }
+    animate(nsteps){
+        // console.log(this.goalx, this.x);
+        const done = Math.round(this.goalx) == Math.round(this.x) && Math.round(this.goaly) == Math.round(this.y);
+        // console.log(done);
+        if (done){
+            this.deltaTime = 0;
+            return 1;
+        }
+        const a = (this.goaly - this.previousy) / (this.goalx - this.previousx);
+        const b = this.goaly - a * this.goalx;
+        this.x = this.x + (this.goalx - this.x) * Math.abs(Math.sin(Math.PI/2 * this.deltaTime/nsteps));
+        // this.y = a*this.x + b;
+        this.y = this.y + (this.goaly - this.y) * Math.abs(Math.sin(Math.PI/2 * this.deltaTime/nsteps));
+        this.deltaTime += 1;
+        return 0;
     }
     updatePosition(x, y){
         this.previousx = this.x;

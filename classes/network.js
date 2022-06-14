@@ -1,6 +1,7 @@
 import { Ant } from "./ants.js";
 import { Node } from "./node.js";
 
+const nsteps = 1;
 export class Network{
     constructor(){
         this.init();
@@ -13,6 +14,7 @@ export class Network{
         this.recentMovement = new Array();
         this.currentCost = 99999;
         this.bestPath = new Set();
+        // this.timeCount = 0;
     }
     addNode(node){
         this.nodes.push(node);
@@ -111,15 +113,15 @@ export class Network{
         })
     }
     initAnts(){
-        const ant1 = new Ant();
-        this.ants.push(ant1);
-        let r = Math.floor(Math.random()*this.nodes.length);
-        ant1.update(this.nodes[r].x, this.nodes[r].y, this.nodes[r].value);
-        for(let i = 0; i<0; i++){
-            const ant2 = new Ant();
-            this.ants.push(ant2);
-            r = Math.floor(Math.random()*this.nodes.length);
-            ant2.update(this.nodes[r].x, this.nodes[r].y, this.nodes[r].value);
+        for(let i = 0; i<50; i++){
+            const ant1 = new Ant();
+            this.ants.push(ant1);
+            let r = Math.floor(Math.random()*this.nodes.length);
+            ant1.update(this.nodes[r].x, this.nodes[r].y, this.nodes[r].value);
+            // const ant2 = new Ant();
+            // this.ants.push(ant2);
+            // r = Math.floor(Math.random()*this.nodes.length);
+            // ant2.update(this.nodes[r].x, this.nodes[r].y, this.nodes[r].value);
         }
     }
     draw_ants(){
@@ -139,8 +141,8 @@ export class Network{
         this.ants.forEach((ant1)=>{
             ant1.updateDesireability(this);
             let next_node_value = ant1.next();
-            console.log(ant1.value);
-            console.log(next_node_value);
+            // console.log(ant1.value);
+            // console.log(next_node_value);
             let node = this.getNode(next_node_value);
             if (node == -1){
                 console.log("Node not found.");
@@ -177,20 +179,41 @@ export class Network{
     simulate(){
         let costSet = new Set();
         function further(n){
+
             clearScreen();
-            if (n.step()){
-                costSet.add(n.currentCost);
-                // console.log(costSet);
+            let animationDone = n.animate();
+            // let animationDone = 1;
+            // n.timeCount += 1;
+            // console.log(animationDone);
+            if (animationDone){
+                if (n.step()){
+                    costSet.add(n.currentCost);
+                    // console.log(costSet);
+                }
+                // n.timeCount = 0;
             }
             n.drawPath();
             n.draw();
-            n.draw_ants();
-            n.traceLines();
+            // n.draw_ants();
+            // n.traceLines();
             n.tracePheromonetrails();
-            console.log('Made a step');
-            clearInterval(n.id);
+            // console.log('Made a step');
+            // clearInterval(n.id);
+            console.log('FPS: ', Math.round(100000/(Date.now() - lastcalltime))/100);
+            lastcalltime = Date.now();
+
         }
-        this.id = setInterval(further, 1, this);
+        const network = this;
+        var lastcalltime = Date.now();
+        function frame(){
+            further(network);
+            // console.log('FPS: ', Math.round(100000/(Date.now() - lastcalltime))/100);
+            lastcalltime = Date.now();
+            // window.requestAnimationFrame(frame);
+        }
+        // window.requestAnimationFrame(frame);
+        this.id = setInterval(further, 0, this);
+
         // clearInterval(id);
     }
     drawPath(){
@@ -264,5 +287,14 @@ export class Network{
     }
     stopSimulation(){
         clearInterval(this.id);
+    }
+    animate(){
+        let done = 1;
+        this.ants.forEach((ant)=>{
+            if (ant.animate(nsteps) == 0){
+                done = 0;
+            }
+        })
+        return done;
     }
 }
