@@ -1,7 +1,7 @@
 import { Ant } from "./ants.js";
 import { Node } from "./node.js";
 
-const nsteps = 1;
+const nsteps = 5000;
 export class Network{
     constructor(){
         this.init();
@@ -113,7 +113,7 @@ export class Network{
         })
     }
     initAnts(){
-        for(let i = 0; i<50; i++){
+        for(let i = 0; i<1; i++){
             const ant1 = new Ant();
             this.ants.push(ant1);
             let r = Math.floor(Math.random()*this.nodes.length);
@@ -194,8 +194,8 @@ export class Network{
             }
             n.drawPath();
             n.draw();
-            // n.draw_ants();
-            // n.traceLines();
+            n.draw_ants();
+            n.traceLines();
             n.tracePheromonetrails();
             // console.log('Made a step');
             // clearInterval(n.id);

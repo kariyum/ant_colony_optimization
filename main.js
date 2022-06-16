@@ -6,5 +6,15 @@ window.onresize = () =>{
 }
 
 const n = new Network();
+// init simulation can take :
+// -- Number of ants
+// -- Number of nodes
 n.initSimulation();
-n.simulate();
+
+// simulate would need :
+// -- Boolean : 
+//              drawpath
+//              tracepheromone
+//              drawAnts
+//              tracelines
+// n.simulate();
