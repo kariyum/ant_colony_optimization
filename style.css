@@ -10,6 +10,9 @@ body{
 canvas{
     display: inline;
 }
+h3{
+    padding:0;
+}
 .algorithm-1{
     display: flex;
     align-items: baseline;
@@ -19,4 +22,23 @@ canvas{
 }
 .button-container > * {
     margin-right: 5%;
+}
+.range-control{
+    display: flex;
+    margin: 2% 0% 2% 0%;
+}
+.algo1{
+    display: flex;
+    justify-content: baseline;
+}
+.start-btn{
+    margin: 5% 0% 5% 5%;
+}
+.listItem{
+    margin: 5% 0% 0% 0%;
+}
+.sim-controls{
+    display: flex;
+    justify-content: space-between;
+    margin-right: 10%;
 }

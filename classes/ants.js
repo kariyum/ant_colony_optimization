@@ -1,4 +1,4 @@
-const alpha = 4; // distance
+const alpha = 2; // distance
 const beta = 4; // pheromone
 export class Ant{
     constructor(){
@@ -8,6 +8,14 @@ export class Ant{
         this.lastNode = -1;
         this.path = new Set();
         this.deltaTime = 0;
+        this.alpha = 4;
+        this.beta = 4;
+    }
+    setAlpha(alpha){
+        this.alpha = alpha;
+    }
+    setBeta(beta){
+        this.beta = beta;
     }
     reInit(){
         this.path = new Set();
@@ -83,15 +91,15 @@ export class Ant{
             let j = Math.min(node.value, this.value);
             let distance = distances[i][j];
             if (distance==0){
-                return
+                return;
             }
 
             // get pheromone level this edge
             let pheromone = pheromoneLevel[i][j];
 
             // compute the desire
-            let to = Math.pow((1/distance), alpha);
-            let nu = Math.pow(pheromone, beta);
+            let to = Math.pow((1/distance), this.alpha);
+            let nu = Math.pow(pheromone, this.beta);
             let desire = to*nu;
             this.desireability.set(node.value, desire);
             // console.log("desire====", desire);
@@ -175,9 +183,15 @@ export class Ant{
         return this.cost;
     }
     traceLines(network){
+        const thisant = this;
         let max_distance = 0;
         let min_distance = network.map[1][0];
         network.nodes.forEach((node)=>{
+            for(const key of thisant.visited){
+                if (key == node.value){
+                    return;
+                }
+            }
             // let distance = Math.sqrt(Math.pow(this.x-node.x, 2) + Math.pow(this.y-node.y, 2));
             let distance = network.map[Math.max(node.value, this.value)][Math.min(node.value, this.value)];
             if (max_distance < distance){
@@ -190,17 +204,24 @@ export class Ant{
             }
         })
         network.nodes.forEach((node)=>{
+            for(const key of thisant.visited){
+                if (key == node.value){
+                    return;
+                }
+            }
             let x = this.x;
             let y = this.y;
             let tox = node.x;
             let toy = node.y;
-            let desireability_to_prefere_near_by_town = alpha;
+            let desireability_to_prefere_near_by_town = this.alpha;
             let distance = Math.sqrt(Math.pow(this.x-node.x, 2) + Math.pow(this.y-node.y, 2));
             if (distance != 0){
                 let desire = Math.pow(min_distance/distance * network.pheromone[Math.max(this.value, node.value)][Math.min(this.value, node.value)], desireability_to_prefere_near_by_town);
                 this.drawLine(x, y, tox, toy, desire);
             }
         })
+        let nextnode = network.getNode(this.value);
+        this.drawLine(this.x, this.y, nextnode.x, nextnode.y, 1);
     }
     drawLine(x, y, tox, toy, strength = 1){
         ctx.lineWidth = 2;
