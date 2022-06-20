@@ -6,6 +6,11 @@ window.onresize = () =>{
 }
 
 const n = new Network();
+let valuesSet = 0;
+let nodesSet = 0;
+let antsSet = 0;
+let alphaSet = 0;
+let betaSet = 0;
 // init simulation can take :
 // -- Number of ants
 // -- Number of nodes
@@ -97,18 +102,88 @@ document.getElementById('start-id1').addEventListener('click', ()=>{
 })
 
 document.getElementById('ant-number-input').addEventListener('input', ()=>{
-    document.getElementById('ant-number-value').innerHTML = Math.floor((canvas.width * canvas.width)/(Math.PI*Math.pow(7,2)) * document.getElementById('ant-number-input').value * 0.0001);
+    // document.getElementById('ant-number-value').innerHTML = document.getElementById('ant-number-input').value;
+    if (valuesSet) return;
+    antsSet = 1;
+    n.initAnts(document.getElementById('ant-number-input').value);
+    clearScreen();
+    n.draw();
+    n.draw_ants();
 })
 
 document.getElementById('sim-alpa-input').addEventListener('input', ()=>{
+    if (valuesSet) return;
+    alphaSet = 1;
     document.getElementById('sim-alpha-value').innerHTML = document.getElementById('sim-alpa-input').value;
+    clearScreen();
+    n.setAlpha(document.getElementById('sim-alpa-input').value);
+    n.draw();
+    n.draw_ants();
+    n.traceLines();
 })
 
 document.getElementById('sim-beta-input').addEventListener('input',()=>{
+    betaSet = 1;
+    if (valuesSet) return;
     document.getElementById('sim-beta-value').innerHTML = document.getElementById('sim-beta-input').value;
+    n.setBeta(document.getElementById('sim-beta-input').value);
+})
+
+document.getElementById('node-number-input').addEventListener('input', ()=>{
+    nodesSet = 1;
+    if (valuesSet) return;
+    document.getElementById('node-number-value').innerHTML = document.getElementById('node-number-input').value;
+    n.init();
+    n.initSimulation(document.getElementById('ant-number-input').value, document.getElementById('node-number-input').value * 0.0001)
 })
 
 document.getElementById('set-btn').addEventListener('click', ()=>{
     // assign values
-    
+    if (!(nodesSet && antsSet && alphaSet && betaSet)){
+        document.getElementById('setmsg').innerHTML = 'Please change values then press again.';
+        return;
+    }
+    document.getElementById('setmsg').innerHTML = '';
+    n.setdrawDesireability(false);
+    if (!valuesSet){
+        valuesSet = 1;
+        document.getElementById('set-btn').innerHTML = 'Reset values';
+        n.setdrawDesireability(false);
+        n.setSpeed(1);
+        n.setdrawAnts(0);
+        n.setdrawPheromone(document.getElementById('trace-pheromone').checked);
+        n.setdrawDesireability(0);
+        n.simulate();
+
+        console.log("Simulation started.");
+        
+    }
+    else{
+        valuesSet= 0;
+        document.getElementById('set-btn').innerHTML = 'Set values';
+        n.stopSimulation();
+    }
 })
+
+document.getElementById('sim-speed').addEventListener('input', ()=>{
+    // console.log(document.getElementById('sim-speed').value);
+    let speed = document.getElementById('sim-speed').value;
+    n.setSpeed(9999-speed);
+})
+
+document.getElementById('draw-ants').addEventListener('change', ()=>{
+    let value = document.getElementById('draw-ants').checked;
+    n.setdrawAnts(value);
+})
+document.getElementById('trace-pheromone').addEventListener('change', ()=>{
+    let value = document.getElementById('trace-pheromone').checked;
+    n.setdrawPheromone(value);
+})
+document.getElementById('trace-desireability').addEventListener('change', ()=>{
+    let value = document.getElementById('trace-desireability').checked;
+    n.setdrawDesireability(value);
+})
+// let m = new Network();
+// m.init();
+// m.initSimulation(100);
+// m.simulate(0);

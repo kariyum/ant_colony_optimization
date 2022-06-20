@@ -8,7 +8,7 @@ export class Ant{
         this.lastNode = -1;
         this.path = new Set();
         this.deltaTime = 0;
-        this.alpha = 4;
+        this.alpha = 5;
         this.beta = 4;
     }
     setAlpha(alpha){
@@ -27,7 +27,7 @@ export class Ant{
         this.previousy = this.y;
         this.goalx = x;
         this.goaly = y;
-        this.radius = 15;
+        this.radius = 7;
         this.value = value;
         this.visited.add(value);
         if (this.lastNode == -1){
@@ -243,7 +243,7 @@ export class Ant{
         if (cost == 0 ){
             console.log('ERROR COST (Releasing pheromone method) VALUE NULL');
         }
-        const ph = 300/cost;
+        const ph = 1150000/Math.pow(cost, 2);
         for (const [i, j] of pathNM(this.path)){
             network.pheromone[i][j] += ph;
             // console.log(i, j);

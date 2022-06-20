@@ -1,7 +1,7 @@
 import { Ant } from "./ants.js";
 import { Node } from "./node.js";
 
-const nsteps = 10000;
+let nsteps = 3000;
 export class Network{
     constructor(){
         this.init();
@@ -15,6 +15,9 @@ export class Network{
         this.currentCost = 99999;
         this.bestPath = new Set();
         this.initialized = 0;
+        this.drawants = 0;
+        this.drawdesireability = 0;
+        this.drawpheromone = 1;
         // this.timeCount = 0;
     }
     addNode(node){
@@ -70,12 +73,13 @@ export class Network{
         }
 
         //initiliaze ants
+        clearScreen();
         this.initAnts(numberofants);
         this.draw();
         this.draw_ants();
     }
     generate(density = 0.002){
-        const minimum_radius = 7;
+        let minimum_radius = 7;
         function randomInt(max){
             return Math.floor(Math.random() * max);
         }
@@ -100,7 +104,7 @@ export class Network{
     checkOverlap(node1, node2){
         let radius = node1.radius;
         let distance = Math.sqrt(Math.pow(node1.x-node2.x, 2) + Math.pow(node1.y-node2.y, 2));
-        return distance < 10*radius; 
+        return distance < 5*radius; 
     }
     clearOverlap(n1){
         let res = 0;
@@ -118,6 +122,7 @@ export class Network{
         })
     }
     initAnts(numberofants){
+        this.ants = new Array();
         for(let i = 0; i<numberofants; i++){
             const ant1 = new Ant();
             this.ants.push(ant1);
@@ -177,7 +182,7 @@ export class Network{
         // console.log("Done=", done);
         return done;
     }
-    simulate(understandthealgo){
+    simulate(understandthealgo=0){
         
         let costSet = new Set();
         function further(n){
@@ -200,9 +205,9 @@ export class Network{
             }
             n.drawPath();
             n.draw();
-            n.draw_ants();
-            if (!step) n.traceLines();
-            n.tracePheromonetrails();
+            if (n.drawants || understandthealgo) n.draw_ants();
+            if ((!step && understandthealgo) || n.drawdesireability) n.traceLines();
+            if (n.drawpheromone) n.tracePheromonetrails();
             // console.log('Made a step');
             // clearInterval(n.id);
             // console.log('FPS: ', Math.round(100000/(Date.now() - lastcalltime))/100);
@@ -307,5 +312,22 @@ export class Network{
         this.ants.forEach((ant)=>{
             ant.setAlpha(alpha);
         })
+    }
+    setBeta(beta){
+        this.ants.forEach((ant)=>{
+            ant.setBeta(beta);
+        })
+    }
+    setSpeed(speed){
+        nsteps = speed;
+    }
+    setdrawAnts(value){
+        this.drawants = value;
+    }
+    setdrawDesireability(value){
+        this.drawdesireability = value;
+    }
+    setdrawPheromone(value){
+        this.drawpheromone = value;
     }
 }
