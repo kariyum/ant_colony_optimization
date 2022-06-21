@@ -6,6 +6,10 @@ html, body {
 body{
     display: flex;
     font-family: 'Montserrat', sans-serif;
+    align-items: flex-start;
+}
+#simulation{
+    display: none;
 }
 canvas{
     display: inline;
@@ -13,9 +17,12 @@ canvas{
 h3{
     padding:0;
 }
+h1{
+    font-size:25px;
+}
 .algorithm-1{
     display: flex;
-    align-items: baseline;
+    align-items: flex-start;
 }
 .button-container{
     display: flex;
@@ -29,7 +36,8 @@ h3{
 }
 .algo1{
     display: flex;
-    justify-content: baseline;
+    justify-content: flex-start;
+    align-items: center;
 }
 .start-btn{
     margin: 5% 0% 5% 5%;

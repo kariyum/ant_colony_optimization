@@ -6,16 +6,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Graph solver</title>
+    <script>
+        MathJax = {
+          loader: {load: ['input/asciimath', 'output/chtml']}
+        }
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script type="text/javascript" id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js">
+    </script>
 </head>
 <body>
-    <canvas></canvas>
+    <canvas id="sim"></canvas>
     <div class="controls">
         <h1>Ant colony optimization</h1>
-        <div class="algo1">
+        <div class="algo1" id="main1" style="align-items: center; justify-content: space-between;">
             <h3>Understand the algorithm</h3>
-            <button class="start-btn" id="start-id">Start</button>
+            <button id="start-id">Start</button>
         </div>
-        <div>
+        <div id="main2">
             <ul style="padding-left:5%;" id="steps"></ul>
             <div id="next-btn"></div>
             <!-- <div class="button-container">
@@ -54,7 +63,7 @@
             <div id="setmsg"></div>
             <h3>Start the simulation</h3>
             <div class="sim-controls">
-                <label for="">Simulation speed</label><input type="range" name="" id="sim-speed" min="1" max="10000" step="1" value="1">
+                <label for="">Simulation speed</label><input type="range" name="" id="sim-speed" min="1" max="10000" step="1" value="10000">
             </div>
             <div class="sim-controls">
                 <label for="">Draw ants</label><input type="checkbox" name="" id="draw-ants">
@@ -65,9 +74,29 @@
             <div class="sim-controls">
                 <label for="">Trace desireability lines</label><input type="checkbox" name="" id="trace-desireability">
             </div>
+            <div id="chart-container">
+            </div>
+            <canvas id="chart"></canvas>
+            <div>
+                The line in <span style="color:green">green</span> represents the minimum cost found yet.</br>
+                Current cost: <span id="current-cost"></span>
+            </div>
+            <div>
+                Maximum cost: <span id="max-cost"></span>
+            </div>
+            <div>
+                Minimum cost: <span id="min-cost"></span>
+            </div>
+            <div>
+                Ants discovered <span id="path-percent"></span>todo% out of all combinations that is equal to <span id="total-number-path"></span>
+                <div style="font-size:13px; display: inline;">
+                    `=(fact(Number Of Nodes-1))/2`
+                </div>
+            </div>
         </div>
     </div>
 </body>
 <script src="./events.js"></script>
 <script type="module" src="./main.js"></script>
+
 </html>

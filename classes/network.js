@@ -1,4 +1,5 @@
 import { Ant } from "./ants.js";
+import { Chart } from "./chart.js";
 import { Node } from "./node.js";
 
 let nsteps = 3000;
@@ -18,7 +19,11 @@ export class Network{
         this.drawants = 0;
         this.drawdesireability = 0;
         this.drawpheromone = 1;
+        this.costArray = new Array();
+        this.iterations = 0;
+        this.paths = new Array();
         // this.timeCount = 0;
+       
     }
     addNode(node){
         this.nodes.push(node);
@@ -86,7 +91,14 @@ export class Network{
         function randomCorr(){
             return [randomInt(canvas.width-60)+30, randomInt(canvas.height-60)+30];
         }
+        function fact(num){
+            var res=1;
+            for (var i = 2; i <= num; i++) res *= i;
+            return res;
+        }
         let nbNodes = (canvas.width * canvas.width)/(Math.PI*Math.pow(minimum_radius,2)) * density;
+        this.totalCombinations = fact(Math.ceil(nbNodes)-1)/2;
+        // console.log(this.totalCombinations);
         for(let i=0; i<nbNodes; i++){
             const [x, y] = randomCorr();
             const currentNode = new Node(i);
@@ -96,7 +108,7 @@ export class Network{
                 const [x, y] = randomCorr();
                 currentNode.update(x, y);
                 bool = this.clearOverlap(currentNode);
-                console.log('Still here');
+                // console.log('Still here');
             }
             this.addNode(currentNode);
         }
@@ -129,6 +141,7 @@ export class Network{
             let r = Math.floor(Math.random()*this.nodes.length);
             ant1.update(this.nodes[r].x, this.nodes[r].y, this.nodes[r].value);
         }
+       
     }
     draw_ants(){
         this.ants.forEach((ant1)=>{
@@ -157,6 +170,7 @@ export class Network{
             ant1.update(node.x, node.y, node.value, this.map);
             if (ant1.isDone()){
                 const cost = ant1.pathCost(this.map);
+                this.costArray.push(cost);
                 // console.log("Path cost = ", cost);
                 // console.log("Path", ant1.path);
                 if (this.currentCost > cost){
@@ -165,6 +179,7 @@ export class Network{
                 }
                 ant1.releasePheromone(this);
             }
+            this.iterations ++;
         })
         let done = 1;
         this.ants.forEach((ant1)=>{
@@ -182,11 +197,12 @@ export class Network{
         // console.log("Done=", done);
         return done;
     }
-    simulate(understandthealgo=0){
-        
-        let costSet = new Set();
-        function further(n){
+    simulate(understandthealgo=0, currentcostele=null, maxcostele=null, mincostele=null, discoveryele=null, totalele=null){
+        const chart = new Chart();
+        // let costSet = new Set();
 
+        function further(n){
+            
             clearScreen();
             let animationDone = n.animate();
             // let animationDone = 1;
@@ -195,10 +211,22 @@ export class Network{
             let step = 0;
             if (animationDone){
                 if (step = n.step()){
-                    costSet.add(n.currentCost);
+                    // costSet.add(n.currentCost);
                     if (understandthealgo){
                         clearInterval(n.id);
+                        n.drawPath();
+                        n.draw();
+                        n.draw_ants();
+                        return;
                     }
+                    chart.clear();
+                    chart.drawAxis();
+                    chart.drawChart(n.costArray);
+                    currentcostele.innerHTML = Math.floor(n.costArray[n.costArray.length-1]);
+                    maxcostele.innerHTML = Math.floor(Math.max(...n.costArray));
+                    mincostele.innerHTML = Math.floor(Math.min(...n.costArray));
+                    // discoveryele.innerHTML = Math.floor((n.iterations/n.totalCombinations)*100)/100;
+                    totalele.innerHTML = n.totalCombinations;
                     // console.log(costSet);
                 }
                 // n.timeCount = 0;
