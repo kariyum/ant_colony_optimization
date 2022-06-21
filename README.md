@@ -10,3 +10,8 @@ It is a well known problem taking part in NP-hard category in combinatorial opti
 ### This work
 This is my way of implementing ACO algorithm and drawing its steps on a HTML canvas using JAVASCRIPT.
 
+## This project will guide you through understanding the algorithm 
+![](./readme_media/tuto.gif)
+
+## And also offering the possibility to run it with your own values
+![](./readme_media/sim.gif)
