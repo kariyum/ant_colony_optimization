@@ -96,8 +96,9 @@ export class Network{
             for (var i = 2; i <= num; i++) res *= i;
             return res;
         }
-        let nbNodes = (canvas.width * canvas.width)/(Math.PI*Math.pow(minimum_radius,2)) * density;
-        this.totalCombinations = fact(Math.ceil(nbNodes)-1)/2;
+        let nbNodes = Math.floor((canvas.width * canvas.width)/(Math.PI*Math.pow(minimum_radius,2)) * density);
+        this.totalCombinations = fact(nbNodes-1)/2;
+        console.log(nbNodes);
         // console.log(this.totalCombinations);
         for(let i=0; i<nbNodes; i++){
             const [x, y] = randomCorr();

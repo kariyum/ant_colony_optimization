@@ -144,7 +144,7 @@ document.getElementById('sim-beta-input').addEventListener('input',()=>{
 document.getElementById('node-number-input').addEventListener('input', ()=>{
     nodesSet = 1;
     if (valuesSet) return;
-    document.getElementById('node-number-value').innerHTML = document.getElementById('node-number-input').value;
+    document.getElementById('node-number-value').innerHTML = Math.floor((canvas.width * canvas.width)/(Math.PI*Math.pow(7,2)) * document.getElementById('node-number-input').value * 0.0001);
     n.init();
     n.initSimulation(document.getElementById('ant-number-input').value, document.getElementById('node-number-input').value * 0.0001)
 })
