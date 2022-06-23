@@ -15,3 +15,8 @@ This is my way of implementing ACO algorithm and drawing its steps on a HTML can
 
 ## And also offering the possibility to run it with your own values
 ![](./readme_media/sim.gif)
+
+## TODO
+* Compute the number of distinct paths found yet to calculate the exploration of the algorithm of the search space.
+* Plot more diversed graphs for a thorough analysis of the simulation.
+* Make use of parallel programming for a faster runtime.
